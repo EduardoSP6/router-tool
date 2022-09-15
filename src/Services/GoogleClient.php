@@ -14,9 +14,6 @@ class GoogleClient implements RoutingClient
 {
     private $providerInstance;
 
-    /**
-     * GoogleClient constructor.
-     */
     public function __construct(RoutingProvider $provider)
     {
         $this->providerInstance = $provider;
@@ -62,7 +59,7 @@ class GoogleClient implements RoutingClient
             return [];
         }
 
-        usort($srcRoute['steps'], function ($i1, $i2) {
+        usort($steps, function ($i1, $i2) {
             return $i1['order'] < $i2['order'];
         });
 
@@ -224,7 +221,8 @@ class GoogleClient implements RoutingClient
             $lastStep['time_course'] = $timeCourse->toTimeString();
         }
 
-        // updates route totalizers
+        // update route data
+        $srcRoute['steps'] = $steps;
         $srcRoute['distance_total'] = $totDistance;
         $srcRoute['duration_total'] = $totDuration;
 
@@ -257,7 +255,7 @@ class GoogleClient implements RoutingClient
             return [];
         }
 
-        usort($srcRoute['steps'], function ($i1, $i2) {
+        usort($steps, function ($i1, $i2) {
             return $i1['order'] < $i2['order'];
         });
 
@@ -334,7 +332,7 @@ class GoogleClient implements RoutingClient
 
         // reorder the steps array
         $steps = $srcRoute['steps'];
-        usort($srcRoute['steps'], function ($i1, $i2) {
+        usort($steps, function ($i1, $i2) {
             return $i1['order'] < $i2['order'];
         });
 
@@ -434,7 +432,8 @@ class GoogleClient implements RoutingClient
             $lastStep['time_course'] = $timeCourse->toTimeString();
         }
 
-        // updates route totalizers
+        // update route data
+        $srcRoute['steps'] = $steps;
         $srcRoute['distance_total'] = $totDistance;
         $srcRoute['duration_total'] = $totDuration;
 
