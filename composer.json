@@ -1,0 +1,31 @@
+{
+    "name": "eduardosp6/router-tool",
+    "description": "Routing solution package for Laravel projects",
+    "type": "library",
+    "homepage": "https://github.com/EduardoSP6/router-tool",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Eduardosp6\\RouterTool\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Eduardo P. Sales",
+            "email": "eduardo.sp6@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "illuminate/support": "^9.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EduardoSP6\\RouterTool\\RouterToolServiceProvider"
+            ]
+        }
+    }
+}
