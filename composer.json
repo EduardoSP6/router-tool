@@ -2,6 +2,11 @@
     "name": "eduardosp6/router-tool",
     "description": "Routing solution package for Laravel projects",
     "type": "library",
+    "keywords": [
+        "Laravel",
+        "Routing",
+        "Geocoding"
+    ],
     "homepage": "https://github.com/EduardoSP6/router-tool",
     "license": "MIT",
     "autoload": {
@@ -17,15 +22,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "ext-json": "*",
-        "illuminate/support": "^9.0"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "EduardoSP6\\RouterTool\\RouterToolServiceProvider"
-            ]
-        }
+        "illuminate/support": ">=7.x"
     }
 }
