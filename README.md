@@ -13,6 +13,16 @@
 - Larvel 7.x or above;
 ```
 
+### Installation:
+```
+- Composer:    
+    $ composer require eduardosp6/router-tool
+    
+- Publish config file:
+
+    $ php artisan vendor:publish --provider=EduardoSP6\RouterTool --tag=config    
+```
+
 ### Classes Diagram:
 ```
 Geocode - Class responsible for transforming address into geographic coordinates.
