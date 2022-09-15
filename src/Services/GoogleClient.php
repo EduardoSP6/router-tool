@@ -38,7 +38,7 @@ class GoogleClient implements RoutingClient
     }
 
     /**
-     * Calcula os tempos e duracao da rota sem modificar a sequencia das entregas
+     * Calculates route times and duration without modifying the sequence of deliveries
      *
      * @throws GoogleApiError
      */
@@ -100,14 +100,14 @@ class GoogleClient implements RoutingClient
             $sentSteps[] = $step;
         }
 
-        // data de saida da rota em segundos desde 1970-01-01. Não poderá ser uma data no passado
+        // exit of route in seconds since 1970-01-01. It cannot be a date in the past
         if (Carbon::now()->lessThan($dateExit)) {
             $departureTime = $dateExit->copy()->isoFormat('X');
         } else {
             $departureTime = "";
         }
 
-        // ENVIA REQUISICAO PARA API DO GOOGLE
+        // Send the request
         $jsonResult = $this->getProviderInstance()->calcDirections(
             false,
             $waypoints,
@@ -295,14 +295,14 @@ class GoogleClient implements RoutingClient
             $arraySteps[] = $step;
         }
 
-        // data de saida da rota em segundos desde 1970-01-01. Não poderá ser uma data no passado
+        // exit of route in seconds since 1970-01-01. It cannot be a date in the past
         if (Carbon::now()->lessThan($dateExit)) {
             $departureTime = $dateExit->copy()->isoFormat('X');
         } else {
             $departureTime = "";
         }
 
-        // ENVIA REQUISICAO PARA API DO GOOGLE
+        // Send the request
         $jsonResult = $this->getProviderInstance()->calcDirections(
             true,
             $waypoints,
