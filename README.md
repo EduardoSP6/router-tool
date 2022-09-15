@@ -9,8 +9,8 @@
 
 ### Prerequisites:
 ```
-- PHP 7.2 or above;
-- Larvel 5.5 or above;
+- PHP 7.4 or above;
+- Larvel 7.x or above;
 ```
 
 ### Classes Diagram:
@@ -53,6 +53,7 @@ $coords = Geocode::exec(
 #### Routing:
 ##### Attention! Using Google as a provider, in generating the route, the maximum number of points is 23
 ```
+// Create a new instance
 $routerTool = new RouterTool();
 
 // Define the provider. Available: TomTomAPI or GoogleAPI
@@ -60,7 +61,9 @@ $routerTool->setProvider(new TomTomAPI());
 
 // Routing calc:
 // params: route data array, expected exit date (Carbon instance)
-// returns: bool (success = true, fail = false)
+// returns: the same array sent as parameter but filled with routing data.
+
+// Example: 
 
 $routeSrc = [
     'distance_total' => 0.0,
@@ -74,7 +77,7 @@ $routeSrc = [
         [
             'id' => 112,
             'order' => 1,
-            'type' => 'delivery', // values: delivery, collect, deposit
+            'type' => 'delivery', // accepted values: delivery, collect, deposit
             'latitude' => 22.834783,
             'longitude' => 43.48729,
             'address' => '',
@@ -91,9 +94,9 @@ $routeSrc = [
     ]
 ]
 
-// Normal mode (keeps the given order sequence of deliveries)
+// Normal mode (keeps the given sequence of deliveries)
 $routerTool->getClient()->performRouting($routeSrc, $exitDate);
            
-// Optimized mode (Edit the order sequence of deliveries for better performance, ditance and duration)
+// Optimized mode (Edit the sequence of deliveries for better performance, ditance and duration)
 $routerTool->getClient()->performRoutingOptimized($routeSrc, $exitDate);
 ```
