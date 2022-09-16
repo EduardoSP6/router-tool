@@ -46,7 +46,9 @@ class RouterTool
     {
         $providerName = config('provider');
 
-        $this->setProvider((new $providerName));
+        $provider = (new $providerName);
+
+        $this->setProvider($provider);
 
         if ($mode == "optimized") {
             return $this->getClient()->performRoutingOptimized($sourceRoute, $dateExit);
