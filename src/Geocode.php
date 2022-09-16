@@ -7,7 +7,7 @@ use Eduardosp6\RouterTool\Providers\TomTomAPI;
 
 class Geocode
 {
-    private static $router;
+    private static RouterTool $router;
 
     /**
      * Returns array containing latitude and longitude of the given address.

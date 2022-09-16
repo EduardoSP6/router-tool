@@ -20,7 +20,9 @@
     
 - Publish config file:
 
-    $ php artisan vendor:publish --provider=EduardoSP6\RouterTool --tag=config    
+    $ php artisan vendor:publish --provider=Eduardosp6\RouterTool\RouterToolServiceProvider --tag=config
+    
+- Insert your API key in config file for the provider do you will use.        
 ```
 
 ### Classes Diagram:
@@ -70,15 +72,20 @@ $routerTool = new RouterTool();
 $routerTool->setProvider(new TomTomAPI());
 
 // Routing calc:
-// params: route data array, expected exit date (Carbon instance)
+// params: route data array, expected exit date (Carbon instance), routing mode
+// mode param:
+// normal - Normal mode (keeps the given sequence of deliveries)
+// optimized - Optimized mode (Edit the sequence of deliveries for better performance, ditance and duration).
+
 // returns: the same array sent as parameter but filled with routing data.
 
 // Example: 
 
-$routeSrc = [
+// route array structure
+$route = [
     'distance_total' => 0.0,
     'duration_total'=> 0.0,
-    'start_point' = [
+    'start_point' => [
         'id' => '1',
         'latitude' => 22.3489343,
         'longitude' => 43.998509
@@ -104,9 +111,8 @@ $routeSrc = [
     ]
 ]
 
-// Normal mode (keeps the given sequence of deliveries)
-$routerTool->getClient()->performRouting($routeSrc, $exitDate);
-           
-// Optimized mode (Edit the sequence of deliveries for better performance, ditance and duration)
-$routerTool->getClient()->performRoutingOptimized($routeSrc, $exitDate);
+$result = $routerTool->performRouting($route, $exitDate);
+          
+dump($result);
+
 ```

@@ -13,7 +13,7 @@ use Illuminate\Support\Arr;
 
 class TomTomClient implements RoutingClient
 {
-    private $providerInstance;
+    private RoutingProvider $providerInstance;
 
     public function __construct(RoutingProvider $provider)
     {

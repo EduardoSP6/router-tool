@@ -3,6 +3,10 @@
 
 return [
 
+    'provider' => Eduardosp6\RouterTool\Providers\TomTomAPI::class,
+
+    'geocoding_mode' => 'both',   // accepted values: tomtom, google, both (consume 2 apis if necessary for better accuracy)
+
     'TOMTOM_API_KEY' => '',
 
     'GOOGLE_MAPS_KEY' => '',

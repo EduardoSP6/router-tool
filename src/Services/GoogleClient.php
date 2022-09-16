@@ -6,13 +6,15 @@ namespace Eduardosp6\RouterTool\Services;
 use Eduardosp6\RouterTool\Contracts\RoutingClient;
 use Eduardosp6\RouterTool\Contracts\RoutingProvider;
 use Eduardosp6\RouterTool\Exceptions\GoogleApiError;
+use Eduardosp6\RouterTool\Exceptions\InvalidRouteArray;
+use Eduardosp6\RouterTool\Exceptions\InvalidStepsAmount;
 use Eduardosp6\RouterTool\Geocode;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 
 class GoogleClient implements RoutingClient
 {
-    private $providerInstance;
+    private RoutingProvider $providerInstance;
 
     public function __construct(RoutingProvider $provider)
     {
@@ -35,12 +37,37 @@ class GoogleClient implements RoutingClient
     }
 
     /**
+     * @throws InvalidStepsAmount
+     * @throws InvalidRouteArray
+     */
+    protected function validate(array $srcRoute)
+    {
+        if (!isset($srcRoute["start_point"])) {
+            throw new InvalidRouteArray();
+        }
+
+        if (empty($srcRoute["start_point"]["id"])
+            || empty($srcRoute["start_point"]["latitude"])
+            || empty($srcRoute["start_point"]["longitude"])) {
+            throw new InvalidRouteArray();
+        }
+
+        if (!isset($srcRoute["steps"])
+            || !is_array($srcRoute["steps"])
+            || count($srcRoute["steps"]) == 0) {
+            throw new InvalidStepsAmount();
+        }
+    }
+
+    /**
      * Calculates route times and duration without modifying the sequence of deliveries
      *
      * @throws GoogleApiError
      */
     public function performRouting(array $srcRoute, Carbon $dateExit): array
     {
+        $this->validate($srcRoute);
+
         $configTimeCharge = config('route_options.time_charge');
         $configTimeDischarge = config('route_options.time_discharge');
 
@@ -237,6 +264,8 @@ class GoogleClient implements RoutingClient
      */
     public function performRoutingOptimized(array $srcRoute, Carbon $dateExit): array
     {
+        $this->validate($srcRoute);
+
         $configTimeCharge = config('route_options.time_charge');
         $configTimeDischarge = config('route_options.time_discharge');
 

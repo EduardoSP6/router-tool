@@ -2,26 +2,25 @@
 
 namespace Eduardosp6\RouterTool;
 
+use Carbon\Carbon;
+use Eduardosp6\RouterTool\Contracts\RoutingClient;
+use Eduardosp6\RouterTool\Contracts\RoutingProvider;
+
 class RouterTool
 {
-    public $provider;
+    protected RoutingProvider $provider;
 
-    public function __construct($provider = null)
+    public function setProvider(RoutingProvider $provider)
     {
         $this->provider = $provider;
     }
 
-    public function setProvider($provider)
-    {
-        $this->provider = $provider;
-    }
-
-    public function getProvider()
+    public function getProvider(): RoutingProvider
     {
         return $this->provider;
     }
 
-    public function getClient()
+    public function getClient(): RoutingClient
     {
         return $this->provider->client;
     }
@@ -37,9 +36,22 @@ class RouterTool
 
         $adjust = 1.16; // adjust of 16% for better proximity to reality
 
-        $dist = ($earthRadius * acos( cos($lat1) * cos($lat2) * cos($lon2 - $lon1) + sin($lat1) * sin($lat2) ));
+        $dist = ($earthRadius * acos(cos($lat1) * cos($lat2) * cos($lon2 - $lon1) + sin($lat1) * sin($lat2)));
         $dist *= $adjust;
 
         return $dist;
+    }
+
+    public function performRouting(array $sourceRoute, Carbon $dateExit, string $mode = 'normal')
+    {
+        $providerName = config('provider');
+
+        $this->setProvider((new $providerName));
+
+        if ($mode == "optimized") {
+            return $this->getClient()->performRoutingOptimized($sourceRoute, $dateExit);
+        }
+
+        return $this->getClient()->performRouting($sourceRoute, $dateExit);
     }
 }
