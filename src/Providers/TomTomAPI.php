@@ -47,7 +47,7 @@ class TomTomAPI implements RoutingProvider
      *
      * @param string $address
      * @return array|null
-     * @throws GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function geocode(string $address): ?array
     {
@@ -55,7 +55,7 @@ class TomTomAPI implements RoutingProvider
             . urlencode(trim($address))
             . '.json?key=' . $this->getApiKey();
 
-        $client = new Client();
+        $client = new \GuzzleHttp\Client();
         $response = $client->request('GET', $url, [
             'headers' => [
                 'Content-Type' => 'application/json',
@@ -139,7 +139,7 @@ class TomTomAPI implements RoutingProvider
             }
         }
 
-        $client = new Client();
+        $client = new \GuzzleHttp\Client();
         $response = $client->request('POST', $url, [
             'headers' => [
                 'Content-Type' => 'application/json',
