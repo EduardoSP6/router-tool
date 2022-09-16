@@ -179,8 +179,8 @@ class TomTomClient implements RoutingClient
                 $time_course->addSeconds($duration);
             }
 
-            $step->date_arrival = $exit_prog->toDateString();
-            $step->time_arrival = $exit_prog->toTimeString();
+            $step['date_arrival'] = $exit_prog->toDateString();
+            $step['time_arrival'] = $exit_prog->toTimeString();
 
             if (strpos($step['type'], "collect")) {
                 $exit_prog
