@@ -44,7 +44,7 @@ class RouterTool
 
     public function performRouting(array $sourceRoute, Carbon $dateExit, string $mode = 'normal')
     {
-        $providerName = config('provider');
+        $providerName = config('router-tool.provider');
 
         $provider = (new $providerName);
 

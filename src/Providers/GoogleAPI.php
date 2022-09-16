@@ -9,11 +9,11 @@ use Eduardosp6\RouterTool\Services\GoogleClient;
 class GoogleAPI implements RoutingProvider
 {
     public $apiKey;
-    public $client;
+    public GoogleClient $client;
 
     public function __construct()
     {
-        $this->apiKey = config('GOOGLE_MAPS_KEY');
+        $this->apiKey = config('router-tool.GOOGLE_MAPS_KEY');
         $this->client = (new GoogleClient($this));
     }
 

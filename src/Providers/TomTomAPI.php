@@ -1,23 +1,23 @@
 <?php
 
 
-namespace EduardoSP6\RouterTool\Providers;
+namespace Eduardosp6\RouterTool\Providers;
 
 
 use Eduardosp6\RouterTool\Services\TomTomClient;
-use EduardoSP6\RouterTool\Contracts\RoutingProvider;
+use Eduardosp6\RouterTool\Contracts\RoutingProvider;
 
 class TomTomAPI implements RoutingProvider
 {
     public $apiKey;
-    public $client;
+    public TomTomClient $client;
 
     /**
      * TomTomAPI constructor.
      */
     public function __construct()
     {
-        $this->apiKey = config('TOMTOM_API_KEY');
+        $this->apiKey = config('router-tool.TOMTOM_API_KEY');
         $this->client = (new TomTomClient($this));
     }
 

@@ -11,7 +11,7 @@ class Geocode
 
     /**
      * Returns array containing latitude and longitude of the given address.
-     * Do not abbreviate the address for better accuracy
+     * Do not abbreviate the address for better accuracy.
      * The address is searched by TomTom and if the city and city are not the same,
      * a request is sent to Google.
      *
@@ -26,15 +26,27 @@ class Geocode
             return null;
         }
 
+        $mode = config('router-tool.geocoding_mode');
+
         self::$router = new RouterTool();
 
-        $result = self::tomtomGeocoding($fullAddress, $district, $city);
+        if ($mode == 'tomtom') {
+            return self::tomtomGeocoding($fullAddress, $district, $city);
 
-        if ($result != null) {
-            return $result;
+        } else if ($mode == 'google') {
+            return self::googleGeocoding($fullAddress);
+
+        } else if($mode == 'both') {
+            $result = self::tomtomGeocoding($fullAddress, $district, $city);
+
+            if ($result != null) {
+                return $result;
+            }
+
+            return self::googleGeocoding($fullAddress);
         }
 
-        return self::googleGeocoding($fullAddress);
+        return null;
     }
 
     /**

@@ -6,6 +6,8 @@ namespace Eduardosp6\RouterTool\Services;
 
 use Eduardosp6\RouterTool\Contracts\RoutingClient;
 use Eduardosp6\RouterTool\Contracts\RoutingProvider;
+use Eduardosp6\RouterTool\Exceptions\InvalidRouteArray;
+use Eduardosp6\RouterTool\Exceptions\InvalidStepsAmount;
 use Eduardosp6\RouterTool\Exceptions\TomTomApiError;
 use Eduardosp6\RouterTool\Geocode;
 use Carbon\Carbon;
@@ -54,13 +56,20 @@ class TomTomClient implements RoutingClient
      * Calculates route times and duration without modifying the sequence of deliveries.
      * Maximum number of waypoints: 150
      *
+     * @param array $srcRoute
+     * @param Carbon $exit_prog
+     * @return array
      * @throws TomTomApiError
+     * @throws InvalidRouteArray
+     * @throws InvalidStepsAmount
      */
     public function performRouting(array $srcRoute, Carbon $exit_prog): array
     {
-        $configTimeCharge = config('route_options.time_charge');
-        $configTimeDischarge = config('route_options.time_discharge');
-        $configReturnBase = config('route_options.return_base');
+        RoutingParamsValidator::validate($srcRoute);
+
+        $configTimeCharge = config('router-tool.route_options.time_charge');
+        $configTimeDischarge = config('router-tool.route_options.time_discharge');
+        $configReturnBase = config('router-tool.route_options.return_base');
 
         $time_service = Carbon::createFromFormat("H:i:s", ($configTimeDischarge != null ? $configTimeDischarge : "00:00:00"));
         $time_charge = Carbon::createFromFormat("H:i:s", ($configTimeCharge != null ? $configTimeCharge : "00:00:00"));
@@ -236,13 +245,20 @@ class TomTomClient implements RoutingClient
      * Calculates route times and duration by modifying the sequence of deliveries - Optimized.
      * Max number of waypoints: 150
      *
+     * @param array $srcRoute
+     * @param Carbon $exit_prog
+     * @return array
+     * @throws InvalidRouteArray
+     * @throws InvalidStepsAmount
      * @throws TomTomApiError
      */
     public function performRoutingOptimized(array $srcRoute, Carbon $exit_prog): array
     {
-        $configTimeCharge = config('route_options.time_charge');
-        $configTimeDischarge = config('route_options.time_discharge');
-        $configReturnBase = config('route_options.return_base');
+        RoutingParamsValidator::validate($srcRoute);
+
+        $configTimeCharge = config('router-tool.route_options.time_charge');
+        $configTimeDischarge = config('router-tool.route_options.time_discharge');
+        $configReturnBase = config('router-tool.route_options.return_base');
 
         $time_service = Carbon::createFromFormat("H:i:s", ($configTimeDischarge != null ? $configTimeDischarge : "00:00:00"));
         $time_charge = Carbon::createFromFormat("H:i:s", ($configTimeCharge != null ? $configTimeCharge : "00:00:00"));
@@ -409,7 +425,6 @@ class TomTomClient implements RoutingClient
 
         // atualiza a chegada prevista se houver step de retorno
         if ($configReturnBase) {
-
             $lastStep = Arr::last($steps);
             if (strpos(strtolower(trim($lastStep['type'])), "deposit")) {
 

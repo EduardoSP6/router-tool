@@ -37,39 +37,21 @@ class GoogleClient implements RoutingClient
     }
 
     /**
-     * @throws InvalidStepsAmount
-     * @throws InvalidRouteArray
-     */
-    protected function validate(array $srcRoute)
-    {
-        if (!isset($srcRoute["start_point"])) {
-            throw new InvalidRouteArray();
-        }
-
-        if (empty($srcRoute["start_point"]["id"])
-            || empty($srcRoute["start_point"]["latitude"])
-            || empty($srcRoute["start_point"]["longitude"])) {
-            throw new InvalidRouteArray();
-        }
-
-        if (!isset($srcRoute["steps"])
-            || !is_array($srcRoute["steps"])
-            || count($srcRoute["steps"]) == 0) {
-            throw new InvalidStepsAmount();
-        }
-    }
-
-    /**
      * Calculates route times and duration without modifying the sequence of deliveries
      *
+     * @param array $srcRoute
+     * @param Carbon $dateExit
+     * @return array
      * @throws GoogleApiError
+     * @throws InvalidRouteArray
+     * @throws InvalidStepsAmount
      */
     public function performRouting(array $srcRoute, Carbon $dateExit): array
     {
-        $this->validate($srcRoute);
+        RoutingParamsValidator::validate($srcRoute);
 
-        $configTimeCharge = config('route_options.time_charge');
-        $configTimeDischarge = config('route_options.time_discharge');
+        $configTimeCharge = config('router-tool.router-tool.route_options.time_charge');
+        $configTimeDischarge = config('router-tool.router-tool.route_options.time_discharge');
 
         $dateArrivalAndExit = $dateExit->copy();
         $timeDischarge = Carbon::createFromFormat("H:i:s", ($configTimeDischarge != null ? $configTimeDischarge : "00:00:00"));
@@ -260,14 +242,19 @@ class GoogleClient implements RoutingClient
      * Calculates route times and duration by modifying the sequence of deliveries - Optimized
      * Attention! The costs of calculating the optimized route are higher
      *
+     * @param array $srcRoute
+     * @param Carbon $dateExit
+     * @return array
      * @throws GoogleApiError
+     * @throws InvalidRouteArray
+     * @throws InvalidStepsAmount
      */
     public function performRoutingOptimized(array $srcRoute, Carbon $dateExit): array
     {
-        $this->validate($srcRoute);
+        RoutingParamsValidator::validate($srcRoute);
 
-        $configTimeCharge = config('route_options.time_charge');
-        $configTimeDischarge = config('route_options.time_discharge');
+        $configTimeCharge = config('router-tool.router-tool.route_options.time_charge');
+        $configTimeDischarge = config('router-tool.router-tool.route_options.time_discharge');
 
         $dateArrivalAndExit = $dateExit->copy();
         $timeDischarge = Carbon::createFromFormat("H:i:s", ($configTimeDischarge != null ? $configTimeDischarge : "00:00:00"));
